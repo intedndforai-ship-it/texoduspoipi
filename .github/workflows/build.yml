@@ -1,0 +1,19 @@
+name: Build Windows EXE
+on:
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with: { bun-version: latest }
+      - uses: dtolnay/rust-toolchain@stable
+      - run: bun install
+      - run: bun run tauri build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Texodus-Setup
+          path: src-tauri/target/release/bundle/nsis/*.exe
